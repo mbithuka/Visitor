@@ -52,10 +52,12 @@
             <input type="tel" id="phone" name="phone" required>
 
             <label for="reason_for_visit">Reason For Visit:</label>
-            <select id="reason_for_visit" name="reason">
+            <select id="reason_for_visit" name="reason_for_visit" required>
+                <option value="" disabled selected>Select a reason</option>
                 <option value="online_studies">Online studies</option>
                 <option value="research">Research</option>
             </select>
+            
             <br>
 
             <label for="card_no">Card Number:</label>
@@ -71,22 +73,22 @@
         </form>
     </div>
 
+    <div id="messageContainer" class="message"></div>
+
     <script>
         const form = document.getElementById("appointmentForm");
+        const messageContainer = document.getElementById("messageContainer");
+
         form.addEventListener("submit", function(event) {
             event.preventDefault();
-
-            // Serialize the form data
             const formData = new FormData(form);
 
-            // Send the form data to a PHP script for processing
             fetch('register.php', {
                 method: 'POST',
                 body: formData
             })
             .then(response => response.text())
             .then(data => {
-                // Handle the response data (e.g., show a success or error message)
                 messageContainer.innerHTML = data;
                 if (data.includes("success")) {
                     messageContainer.className = "message success";
@@ -96,9 +98,10 @@
             })
             .catch(error => {
                 console.error(error);
+                messageContainer.innerHTML = "An error occurred while processing your request.";
+                messageContainer.className = "message error";
             });
         });
-    </script>
     </script>
 </body>
 </html>
